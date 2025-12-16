@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ms-gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: etudiant-service
+          uri: lb://etudiant-service
+          predicates:
+            - Path=/api/etudiants/**
+        - id: service-notes
+          uri: lb://service-notes
+          predicates:
+            - Path=/api/notes/**
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/gestion-etudiants
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://ms-discovery:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

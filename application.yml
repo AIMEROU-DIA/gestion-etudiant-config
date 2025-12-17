@@ -1,10 +1,18 @@
-spring:
-  jackson:
-    serialization:
-      indent-output: true
+# spring:
+#   jackson:
+#     serialization:
+#       indent-output: true
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
+# management:
+#   endpoints:
+#     web:
+#       exposure:
+#         include: health,info
+
+spring:
+  cloud:
+    config:
+      allow-override: true
+      override-none: true
+      override-system-properties: false
+

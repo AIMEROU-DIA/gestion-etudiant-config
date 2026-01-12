@@ -41,6 +41,11 @@ app:
     admin-username: admin
     admin-password: admin
     admin-client-id: admin-cli
+    client-id: gestion-etudiants-client
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:8088
 
 eureka:
   instance:

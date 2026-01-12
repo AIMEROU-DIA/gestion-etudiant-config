@@ -1,0 +1,67 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    url: jdbc:mariadb://ms-note-db:3306/db_note?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: note_user
+    password: passer123
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 10
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MariaDBDialect
+
+  application:
+    name: ms-note
+
+eureka:
+  instance:
+    hostname: ms-note 
+    prefer-ip-address: false  
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  client:
+    service-url:
+      defaultZone: http://ms-discover:8761/eureka  
+    fetch-registry: true
+    register-with-eureka: true
+    initial-instance-info-replication-interval-seconds: 5
+    registry-fetch-interval-seconds: 5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    config-url: /ms-note/v3/api-docs/swagger-config
+    url: /ms-note/v3/api-docs
+    oauth2-redirect-url: http://localhost:8088/ms-note/swagger-ui/oauth2-redirect.html
+  server-url: http://localhost:8088/ms-note
+
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud: DEBUG
+    com.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG

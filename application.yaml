@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: global-config
+
+  cloud:
+    config:
+      enabled: true
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /ms-classe/v3/api-docs

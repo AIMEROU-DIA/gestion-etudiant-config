@@ -1,0 +1,27 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: ms-config
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/safydiallo/gestion-etudiant-config
+          default-label: main
+          clone-on-start: true
+          force-pull: true
+          timeout: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,refresh
+
+logging:
+  level:
+    org.springframework.cloud.config: INFO
+    uasz.alumni: DEBUG

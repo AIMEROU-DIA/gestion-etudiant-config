@@ -1,0 +1,103 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: ms-gateway
+
+  main:
+    web-application-type: reactive
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/gestion-etudiants
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # la découverte automatique des routes
+          lower-case-service-id: true
+
+      routes:
+
+        # ===== USER =====
+        - id: service-user
+          uri: lb://service-user
+          predicates:
+            - Path=/service-user/**
+          filters:
+            - StripPrefix=1
+
+        # ===== CLASSE =====
+        - id: ms-classe
+          uri: lb://ms-classe
+          predicates:
+            - Path=/ms-classe/**
+          filters:
+            - StripPrefix=1
+
+        # ===== ETUDIANT =====
+        - id: ms-etudiant
+          uri: lb://ms-etudiant
+          predicates:
+            - Path=/ms-etudiant/**
+          filters:
+            - StripPrefix=1
+
+        # ===== NOTE =====
+        - id: ms-note
+          uri: lb://ms-note
+          predicates:
+            - Path=/ms-note/**
+          filters:
+            - StripPrefix=1
+
+        # ===== ENSEIGNANT =====
+        - id: ms-enseignant
+          uri: lb://ms-enseignant
+          predicates:
+            - Path=/ms-enseignant/**
+          filters:
+            - StripPrefix=1
+
+      # ======================
+      # CORS GLOBAL
+      # ======================
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "*"
+            allowed-headers: "*"
+            allowed-methods: "*"
+
+      # ======================
+      # HTTP CLIENT
+      # ======================
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 10s
+
+      # ======================
+      # ACTUATOR
+      # ======================
+      management:
+        endpoint:
+          gateway:
+            enabled: true
+          health:
+            show-details: always
+        endpoints:
+          web:
+            exposure:
+              include: health,info,gateway
+
+      # ======================
+      # LOGS DEBUG (IMPORTANT)
+      # ======================
+      logging:
+        level:
+          org.springframework.cloud.gateway: DEBUG
+          org.springframework.cloud.loadbalancer: DEBUG

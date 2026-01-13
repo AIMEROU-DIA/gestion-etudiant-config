@@ -2,60 +2,35 @@ server:
   port: 8081
 
 spring:
-  datasource:
-    url: jdbc:mariadb://service-user-db:3306/db_user?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
-    username: user
-    password: passer123
-    driver-class-name: org.mariadb.jdbc.Driver
-    hikari:
-      connection-timeout: 60000
-      maximum-pool-size: 10
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MariaDBDialect
-
   application:
     name: service-user
 
-  # ✅ AJOUT OBLIGATOIRE : Resource Server JWT (Keycloak)
+  # AJOUT OBLIGATOIRE : Resource Server JWT (Keycloak)
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://keycloak:8080/realms/gestion-etudiants
 
- 
+
       
-# ✅ AJOUT OPTIONNEL : seulement si service-user crée des users Keycloak via API
-app:
-  keycloak:
-    server-url: http://keycloak:8080
-    realm: gestion-etudiants
-    admin-realm: master
-    admin-username: admin
-    admin-password: admin
-    admin-client-id: admin-cli
-    client-id: gestion-etudiants-client
-  cors:
-    allowed-origins:
-      - http://localhost:3000
-      - http://localhost:8088
+# AJOUT OPTIONNEL : seulement si service-user crée des users Keycloak via API
+keycloak:
+  server-url: http://keycloak:8080
+  realm: gestion-etudiants
+  admin-realm: master
+  client-id: gestion-etudiants-backend
+  client-secret: wCBKpft4BEaFGuLXAzboi6XGiL22zp7q
 
 eureka:
   instance:
-    hostname: service-user  # IMPORTANT: nom du conteneur
-    prefer-ip-address: false  # Désactivé pour Docker
+    hostname: service-user 
+    prefer-ip-address: false  
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
   client:
     service-url:
-      defaultZone: http://ms-discover:8761/eureka  # CORRIGÉ: ms-discover au lieu de localhost
+      defaultZone: http://ms-discover:8761/eureka  
     fetch-registry: true
     register-with-eureka: true
     initial-instance-info-replication-interval-seconds: 5
@@ -65,7 +40,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,metrics"
+        include: "*"
   endpoint:
     health:
       show-details: always
